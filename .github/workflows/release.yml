@@ -1,0 +1,20 @@
+name: Package and publish addon
+on:
+  push:
+    tags: ['v*']
+permissions:
+  contents: write
+jobs:
+  verify:
+    uses: ./.github/workflows/test-release.yml
+  release:
+    needs: verify
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+      - name: Package and publish GitHub release
+        uses: BigWigsMods/packager@v2
+        env:
+          GITHUB_OAUTH: ${{ secrets.GITHUB_TOKEN }}

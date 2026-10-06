@@ -1,0 +1,6 @@
+## Interface: 120105
+## Title: Threat Percentage
+## Notes: Enables numeric threat display on login.
+## Version: 1.0.0
+
+ThreatPercentage.lua

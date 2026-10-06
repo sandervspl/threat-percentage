@@ -1,0 +1,6 @@
+local frame = CreateFrame("Frame")
+frame:RegisterEvent("PLAYER_LOGIN")
+frame:SetScript("OnEvent", function(self)
+    C_CVar.SetCVar("threatShowNumeric", "1")
+    self:UnregisterEvent("PLAYER_LOGIN")
+end)

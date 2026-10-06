@@ -1,0 +1,8 @@
+package-as: ThreatPercentage
+ignore:
+  - scripts
+  - .github
+  - .cache
+  - dist
+  - AGENTS.md
+  - requirements-dev.txt
