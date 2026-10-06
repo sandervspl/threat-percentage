@@ -30,4 +30,4 @@ Run `bash scripts/sync-wow-ui-source.sh live` through Git Bash or WSL to fetch t
 
 GitHub Actions verifies the addon and local deployment on pushes and pull requests, retaining the results as downloadable artifacts. Pushing a `v*` tag runs the same checks, then BigWigsMods/packager creates a ZIP and publishes a GitHub release. The workflow needs repository Actions enabled and uses the built-in `GITHUB_TOKEN` with `contents: write`.
 
-CurseForge and Wago publishing are not configured. To enable them later, add the actual project IDs to the TOC and map repository secrets to the packager's `CF_API_TOKEN` and `WAGO_API_TOKEN`. This project does not currently have a GitHub remote.
+CurseForge publishing targets project `1730539`. Add the CurseForge API token as repository secret `CF_API_KEY`; the workflow maps it to the packager's `CF_API_TOKEN`. Wago publishing is not configured.
