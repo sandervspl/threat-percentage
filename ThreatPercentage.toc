@@ -1,7 +1,7 @@
-## Interface: 120105
+## Interface: 120100, 50504, 38002, 20506, 11509, 16001
 ## Title: Threat Percentage
 ## Notes: Enables numeric threat display on login.
-## Version: 1.0.0
+## Version: 1.0.2
 ## X-Curse-Project-ID: 1730539
 
 ThreatPercentage.lua

@@ -6,3 +6,4 @@ ignore:
   - dist
   - AGENTS.md
   - requirements-dev.txt
+  - CURSEFORGE_DESCRIPTION.md

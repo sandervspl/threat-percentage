@@ -56,7 +56,7 @@ function Test-WowClientDirectory {
         [System.IO.DirectoryInfo] $Directory
     )
 
-    if ($Directory.Name -ne '_retail_') {
+    if ($Directory.Name -notin @('_retail_', '_classic_', '_classic_era_', '_anniversary_', '_classic_titan_', '_classic_beta_')) {
         return $false
     }
 

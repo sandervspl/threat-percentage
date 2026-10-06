@@ -6,7 +6,7 @@ from lupa.lua51 import LuaRuntime
 
 root = Path(__file__).resolve().parents[1]
 files = [root / "ThreatPercentage.toc", root / "ThreatPercentage.lua"]
-lua_source = files[1].read_text()
+lua_source = (root / "ThreatPercentage.lua").read_text()
 for initial in ("0", "1"):
     for reload in range(2):
         lua = LuaRuntime()

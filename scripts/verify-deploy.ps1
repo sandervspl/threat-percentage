@@ -5,23 +5,27 @@ $ErrorActionPreference = 'Stop'
 $sourceRoot = [IO.Path]::GetFullPath((Join-Path $PSScriptRoot '..'))
 $fixtureRoot = Join-Path ([IO.Path]::GetTempPath()) ('ThreatPercentage-' + [guid]::NewGuid())
 New-Item -ItemType Directory -Path $fixtureRoot | Out-Null
-foreach ($flavor in @('_retail_', '_classic_', '_classic_era_')) {
+foreach ($flavor in @('_retail_', '_classic_', '_classic_era_', '_anniversary_', '_classic_titan_', '_classic_beta_', '_ptr_')) {
     $client = Join-Path $fixtureRoot $flavor
     New-Item -ItemType Directory -Path $client | Out-Null
     Set-Content -LiteralPath (Join-Path $client '.flavor.info') -Value $flavor
 }
 & "$PSScriptRoot/copy-to-wow.ps1" -WowRoot $fixtureRoot -WhatIf
 $addon = Join-Path $fixtureRoot '_retail_/Interface/AddOns/ThreatPercentage'
-if (Test-Path -LiteralPath $addon) { throw 'WhatIf created the addon directory.' }
+foreach ($flavor in @('_retail_', '_classic_', '_classic_era_', '_anniversary_', '_classic_titan_', '_classic_beta_', '_ptr_')) {
+    if (Test-Path -LiteralPath (Join-Path $fixtureRoot "$flavor/Interface")) { throw 'WhatIf created the addon directory.' }
+}
 & "$PSScriptRoot/copy-to-wow.ps1" -WowRoot @($fixtureRoot, (Join-Path $fixtureRoot '_retail_'))
-foreach ($name in @('ThreatPercentage.lua', 'ThreatPercentage.toc')) {
-    if ((Get-FileHash -LiteralPath (Join-Path $addon $name)).Hash -ne
-        (Get-FileHash -LiteralPath (Join-Path $sourceRoot $name)).Hash) { throw "Incorrect copy: $name" }
+$runtimeFiles = @('ThreatPercentage.lua', 'ThreatPercentage.toc')
+foreach ($flavor in @('_retail_', '_classic_', '_classic_era_', '_anniversary_', '_classic_titan_', '_classic_beta_')) {
+    $addon = Join-Path $fixtureRoot "$flavor/Interface/AddOns/ThreatPercentage"
+    foreach ($name in $runtimeFiles) {
+        if ((Get-FileHash -LiteralPath (Join-Path $addon $name)).Hash -ne
+            (Get-FileHash -LiteralPath (Join-Path $sourceRoot $name)).Hash) { throw "Incorrect copy: $flavor/$name" }
+    }
+    if (@(Get-ChildItem -LiteralPath $addon -File).Count -ne $runtimeFiles.Count) { throw 'Unexpected deployed files.' }
 }
-if (@(Get-ChildItem -LiteralPath $addon -File).Count -ne 2) { throw 'Unexpected deployed files.' }
-foreach ($flavor in @('_classic_', '_classic_era_')) {
-    if (Test-Path -LiteralPath (Join-Path $fixtureRoot "$flavor/Interface")) { throw 'Unsupported client was modified.' }
-}
+if (Test-Path -LiteralPath (Join-Path $fixtureRoot '_ptr_/Interface')) { throw 'Unsupported client was modified.' }
 $rejected = $false
 try { & "$PSScriptRoot/copy-to-wow.ps1" -WowRoot (Join-Path $fixtureRoot 'missing') }
 catch { $rejected = $true }
